@@ -118,7 +118,7 @@
 \renewcommand\contentsname{\zihao{-2}目\zhspace 录}
 \renewcommand\listfigurename{\zihao{-2}图目录}
 \renewcommand\listtablename{\zihao{-2}表目录}
-\newcommand\ustc@pdf@contentsname{\zihao{-2}目录}
+\newcommand\ustc@pdf@contentsname{目录}
 \newcommand\ustc@assertionname{断言}
 \newcommand\ustc@axiomname{公理}
 \newcommand\ustc@corollaryname{推论}
@@ -311,7 +311,9 @@
     \fi
     \chapter*{摘\zhspace 要}
 	\phantomsection
-\addcontentsline{toc}{chapter}{摘要\vspace{-12bp}}}{}
+\addcontentsline{toc}{chapter}{摘要}
+\addtocontents{toc}{\protect\vspace{-12bp}}%
+}{}
 \newenvironment{enabstract}{%
     \ifustc@opt@bachelor
         \ctexset{chapter/format += \zihao{-2}}
@@ -383,7 +385,7 @@
         format = \centering\sffamily\bfseries\setfontsize{16bp},
         nameformat = {},
         titleformat = {},
-        number = \arabic{chapter},
+        number = \chinese{chapter},
         beforeskip = 24bp,
         afterskip = 18bp,
     },
