@@ -5,14 +5,13 @@
 % bachelor|master|doctor
 \usepackage{ustcextra}
 \graphicspath{{figures/}}
-\bibliographystyle{ustcauthoryear}
-% \bibliographystyle{ustcnumerical}
-
-\title{中国科学技术大学\\基于Spark平台的推荐系统设计与实现}
-\author{沈国栋}
-\major{信息安全专业}
-\advisor{薛开平\ 副教授}
-\submitdate{二〇一六年五月}
+%\bibliographystyle{ustcauthoryear}
+\bibliographystyle{ustcnumerical}
+\title{中国科学技术大学\\毕业论文模板示例文档}
+\author{赵钱孙}
+\major{XXXX专业}
+\advisor{钱学森\ 教授}
+\submitdate{二〇九九年十三月}
 %\secrettext{机密\quad 小于等于20年}   % 内部|秘密|机密，注释本行则不保密
 \depart{三十三系}
 
@@ -40,14 +39,17 @@
 %   backmatter: 致谢、发表论文
 %
 \frontmatter
-\input{chapters/abstract}
+\input{chapters/acknowledgements}
+
+%  move main matter here because of indexing.
+\mainmatter
 \tableofcontents
 \listoffigures
 \listoftables
 \listofalgorithms  % 算法索引，如不需要，可直接注释掉本行
+\input{chapters/abstract}
 % \input{chapters/notation}
 
-\mainmatter
 \input{chapters/intro}
 \input{chapters/alg}
 \input{chapters/exp}
@@ -59,13 +61,13 @@
 \input{chapters/code}
 \input{chapters/crossref}
 \input{chapters/citation}
+
 \bibliography{bib/tex}
 
 \appendix
-\chapter{论文规范}
+%\chapter{论文规范}
 
-\backmatter
-\input{chapters/acknowledgements}
-\input{chapters/publications}
+%\backmatter
+%\input{chapters/publications}
 
 \end{document}
