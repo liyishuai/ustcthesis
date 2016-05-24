@@ -15,7 +15,7 @@
 其二，延迟高且不稳定。现有软件定义网络的处理延迟从几十微秒到毫秒量级不等。
 无法满足证券交易等对低延迟要求严苛的应用需求。
 
-在图形处理器(graphics processing unit, GPU)、专用网络处理器和FPGA上均有相关的工作旨在保障灵活性的基础上客服软件处理网络包的上述限制。
+在图形处理器(graphics processing unit, GPU)、专用网络处理器和FPGA上均有相关的工作旨在保障灵活性的基础上克服软件处理网络包的上述限制。
 相比于GPU而言，FPGA能耗更低；相比于专用网络处理器，FPGA可通过硬件逻辑实现更多服务所需的功能。
 更重要的是，将FPGA部署在大规模数据中心的成本更低。
 
@@ -32,9 +32,9 @@
 \section{场效可编程门阵列体系结构}
 场效可编程门阵列(FPGA)由大量逻辑门组成。其基本编程单元为逻辑块，由查找表和寄存器组成。
 其中查找表可编程为任何组合逻辑计算，寄存器可以存储状态。
-FPGA还包含存储数据的块随机访问存储器(block random access memory, BRAM)、
-处理复杂算术运算的数字信号处理单元(digital signal processing, DSP)。
-FPGA通过PCIe子板与主机相连，其中子板包含数G字节的动态随机访问存储器(dynamic random access memory, DRAM)
+FPGA还包含存储数据的块随机访问存储器(block random access memory)、
+处理复杂算术运算的数字信号处理单元(digital signal processing)。
+FPGA通过PCIe子板与主机相连，其中子板包含数G字节的动态随机访问存储器(dynamic random access memory)
 以及10G/40G以太网端口等其他通信界面。
 
 相比于CPU和GPU而言，FPGA的时钟频率较低、访存带宽较小。
@@ -47,16 +47,8 @@ FPGA到单个块存储器和外部的动态存储器的带宽约为2\textasciiti
 理论上，所有这些器件均可并行地工作。因此数千个“核”在同一个FPGA芯片中并行工作是有可能的。
 尽管单个块存储器的带宽有限，但同时访问数千个块存储器可使带宽达到TBps量级。
 因此，为了在FPGA平台上实现高性能，必须充分利用其并行化的能力。
-%\section{模板简介}
-%测试脚注\footnote{分别编号}。
-%
-%\subsection{模板介绍1}
-%
-%\subsubsection{模板测试}
-%
-%\subsection{模板介绍2}
-%
-%\section{系统要求}
-%
-%\section{问题反馈}
-%测试脚注\footnote{脚注2}
+
+传统的FPGA编程使用Verilog、VHDL等硬件描述语言实现。这些语言关注底层细节，难于学习，编程复杂。
+
+为了减轻编程负担，工业界与学术界均有开发高级编程工具，将以C语言为主的高级语言编写的程序转化为硬件程序。
+其中包括微软亚洲研究院无线与网络研究组开发的ClickNP编程平台。
