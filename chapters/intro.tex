@@ -28,6 +28,14 @@
 本文借助微软亚洲研究院无线与网络研究组最新开发的ClickNP平台进行FPGA编程，
 针对数据中心网络场景优化了包生成器及接收器、OpenFlow防火墙、IPSec网关、L4负载均衡、pFabric流调度器等应用，
 并对其性能进行评测。
+
+\section{场效可编程门阵列体系结构}
+场效可编程门阵列(FPGA)由大量逻辑门组成。其基本编程单元为逻辑块，由查找表和寄存器组成。
+其中查找表可编程为任何组合逻辑计算，寄存器可以存储状态。
+FPGA还包含存储数据的块随机访问存储器(block random access memory, BRAM)、
+处理复杂算术运算的数字信号处理单元(digital signal processing, DSP)。
+FPGA通过PCIe子板与主机相连，其中子板包含数G字节的动态随机访问存储器(dynamic random access memory, DRAM)
+以及10G/40G以太网端口等其他通信界面。
 %\section{模板简介}
 %测试脚注\footnote{分别编号}。
 %
