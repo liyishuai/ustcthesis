@@ -36,6 +36,17 @@ FPGA还包含存储数据的块随机访问存储器(block random access memory,
 处理复杂算术运算的数字信号处理单元(digital signal processing, DSP)。
 FPGA通过PCIe子板与主机相连，其中子板包含数G字节的动态随机访问存储器(dynamic random access memory, DRAM)
 以及10G/40G以太网端口等其他通信界面。
+
+相比于CPU和GPU而言，FPGA的时钟频率较低、访存带宽较小。
+典型的FPGA时钟频率在200MHz左右，相比于时钟频率2\textasciitilde 3GHz的CPU低一个多数量级。
+FPGA到单个块存储器和外部的动态存储器的带宽约为2\textasciitilde 4GBps，
+而英特尔至强处理器的访存带宽约为40GBps，GPU的带宽则高达100GBps。
+
+但相比于被有限核数限制并行数的CPU和GPU而言，FPGA的可并行化程度较高。
+现代的FPGA可以集成数百万个逻辑块、数百Kbit寄存器、数十Mbit块存储器以及数千个数字信号处理单元。
+理论上，所有这些器件均可并行地工作。因此数千个“核”在同一个FPGA芯片中并行工作是有可能的。
+尽管单个块存储器的带宽有限，但同时访问数千个块存储器可使带宽达到TBps量级。
+因此，为了在FPGA平台上实现高性能，必须充分利用其并行化的能力。
 %\section{模板简介}
 %测试脚注\footnote{分别编号}。
 %
