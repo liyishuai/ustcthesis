@@ -24,3 +24,19 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 处理函数在元件工作期间反复调用，处理输入的数据；信号函数类似于中断控制器，
 在元件从主机进程收到信号时被调用，处理指令。
 \end{description}
+
+一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
+从其一端写入，从另一端读取，如图~\ref{fig:channel}所示。
+\begin{figure}
+\centering
+\includegraphics[width=4in]{channel}
+\caption{通道} \label{fig:channel}
+\end{figure}
+
+每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
+负载数据长32字节。如图~\ref{fig:flit}所示。
+\begin{figure}
+\centering
+\includegraphics[width=4in]{flit}
+\caption{帧} \label{fig:flit}
+\end{figure}
