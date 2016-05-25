@@ -34,9 +34,20 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \end{figure}
 
 每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
-负载数据长32字节。如图~\ref{fig:flit}所示。
+数据载荷长32字节。如图~\ref{fig:flit}所示，其成员定义如下：
+\lstinputlisting[language=C++]{code/flit.cl}
+
 \begin{figure}
 \centering
 \includegraphics[width=4in]{flit}
 \caption{帧} \label{fig:flit}
 \end{figure}
+
+以完整包为代表的大段数据会被拆分为多个帧在元件之间传播。其中第一帧的包开始位(start of packet, sop)置为真，
+最后一帧的包结束位(end of packet, eop)置为真。如果数据载荷小于32字节，那么最后一帧的留白(padding, pad)域指代载荷的尾部留白区段大小。
+将大的包拆分为帧，不仅能够降低延迟，还有助于提升处理包数据的各级流水线之间并行化程度。
+
+在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统，
+以下为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
+其开头部分描述该系统依赖的元件类型，随后将元件实例化，并用箭头表示其通道连接关系。
+\lstinputlisting{code/RoCE.cfg}
