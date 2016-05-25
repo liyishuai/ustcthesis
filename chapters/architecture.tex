@@ -1,0 +1,15 @@
+\chapter{ClickNP编程平台介绍}
+\section{系统架构}
+ClickNP基于Catapult Shell体系结构搭建。该体系结构包含PCIe、直接内存访问(direct memory access, DMA)、
+内存管理单元(memory management unit, MMU)、以太网介质访问控制(media access control, MAC)等
+适用于多种应用场景的可服用逻辑，并将其抽象为定义好的接口。由ClickNP编写的FPGA程序生成的目标为Catapult功能。
+由于ClickNP依赖的不同高级编程工具生成的目标接口不一致，因此在其下层有一个适配层，
+将不同高级编程工具接口统一到Catapul Shell接口。
+
+主机进程通过ClickNP库函数与FPGA程序通信，而库函数则依赖Catapult PCIe接口实现。
+ClickNP库主要实现两个重要的功能：主机与FPGA之间的高速低延迟PCIe通道应用程序接口，
+以及不同高级编程工具向FPGA模块传递参数并发送启动、停止、复位等信号的调用接口。
+
+主机进程包括一个管理线程以及零个或多个工作线程。管理进程负责将程序镜像载入硬件、
+启动工作进程、根据配置初始化FPGA和CPU中的ClickNP元件以及在运行时通过想各个元件发送信号来控制其行为。
+在CPU的指派下，每个工作线程可以处理多个任务。
