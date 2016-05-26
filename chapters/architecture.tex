@@ -61,7 +61,8 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \centering
 \lstinputlisting{code/RoCE.cfg}
 \caption{ClickNP配置文件示例} \label{fig:cfg}
-\note{第8行\lstinline$host$关键字代表将\lstinline$RoCE_Connector$元件实例化为主机工作线程}
+\note{第8行\lstinline$host$关键字代表将\lstinline$RoCE_Connector$元件实例化为主机工作线程。
+\lstinline$from_nic$和\lstinline$to_nic$分别为FPGA网卡的输出和输入端口}
 \end{figure}
 
 \subsection{编程语言}
