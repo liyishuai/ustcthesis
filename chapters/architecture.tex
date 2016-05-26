@@ -55,12 +55,13 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 
 在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统，
 图~\ref{fig:cfg}为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
-其开头部分描述该系统依赖的元件类型，随后将元件实例化，host代表主机进程，并用箭头表示其通道连接关系，
+其开头部分描述该系统依赖的元件类型，随后将元件实例化，并用箭头表示其通道连接关系，
 自左侧元件的输出端口指向右侧元件的输入端口，方括号中的数字代表端口号。
 \begin{figure}
 \centering
 \lstinputlisting{code/RoCE.cfg}
 \caption{ClickNP配置文件示例} \label{fig:cfg}
+\note{第8行\lstinline$host$关键字代表将\lstinline$RoCE_Connector$元件实例化为主机工作线程}
 \end{figure}
 
 \section{编程语言}
@@ -107,3 +108,17 @@ ClickNP内建了一系列与端口进行数据交互的函数接口，如表~\re
 \lstinputlisting{code/Count.cl}
 \caption{包计数器元件定义} \label{fig:count}
 \end{figure}
+
+\section{编译工具链}
+ClickNP工具链以ClickNP编译器为前端，以Visual Studio、GCC等C/C++编译器、
+Altera OpenCL SDK、Xilinx Vidado HLS等高级编程工具为后端。
+开发人员需要完成三部分工作：
+\begin{enumerate}
+\item 定义元件，每个元件实现一小部分简单的功能；
+\item 编写配置文件，描述元件之间的连接关系，以组成完整的逻辑系统；
+\item 设计主机管理进程，初始化各元件并在运行时根据用户输入控制元件行为。
+\end{enumerate}
+
+以上三部分源程序由ClickNP编译器翻译为主机程序和FPGA程序两部分中间代码。
+前者可由普通的C/C++编译器编译为目标文件，
+后者需要由商业化高级编程工具合成为FPGA目标文件。
