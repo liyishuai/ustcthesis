@@ -17,3 +17,23 @@
 Linux防火墙采用IPSet处理精确匹配规则，采用IPTables处理模糊匹配规则。
 我们在结果中引入了所使用的戴尔S6000交换机的性能作为参照，其防火墙处理能力有限，
 只支持1.7K条模糊匹配规则。
+
+值得一提的是，原先的Click+DPDK不支持接收端扩放(receive side scaling, RSS)。
+我们在实验中修复了这一问题，而且发现Click+DPDK只需要4个核就可达到其最佳性能。
+与此同时，对于Linux防火墙，我们需要尽可能地增加核数来提升其性能。
+然而接收端扩放的限制使其最多只能使用8个核。
+
+图~\ref{fig:ofwrate} 展示各防火墙在不同数量模糊匹配规则下的处理速率对比。
+可见ClickNP和S6000均可达到56.4Mpps的最大速率。
+
+Click+DPDK的处理速率大约可达18Mpps。Click采用了静态决策树来实现模糊匹配，因而其处理速率不随规则增多而降低。
+然而该决策树的实现需要基于所有规则的先验知识，在运行时更新规则很困难。
+
+基于IPTable的Linux防火墙处理速率低达2.67Mpps。
+而且因为IPTable的模糊匹配是线性的，所以其处理速率随着规则的增多呈倒数级下降。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4in]{ofwrate}
+\caption{各防火墙模糊匹配速率对比} \label{fig:ofwrate}
+\note{包大小为64字节}
+\end{figure}

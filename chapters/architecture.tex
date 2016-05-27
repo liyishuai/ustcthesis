@@ -26,7 +26,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \end{description}
 
 一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
-从其一端写入，从另一端读取，如图~\ref{fig:channel}所示。
+从其一端写入，从另一端读取，如图~\ref{fig:channel} 所示。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=4in]{channel}
@@ -34,7 +34,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \end{figure}
 
 每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
-数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef}所示。
+数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef} 所示。
 \begin{figure}[ht]
 \centering
 \includegraphics[width=4in]{flit}
@@ -50,7 +50,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 将大的包拆分为帧，不仅能够降低延迟，还有助于提升处理包数据的各级流水线之间并行化程度。
 
 在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统，
-代码~\ref{code:cfg}为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
+代码~\ref{code:cfg} 为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
 其开头部分描述该系统依赖的元件类型，随后将元件实例化，并用箭头表示其通道连接关系，
 自左侧元件的输出端口指向右侧元件的输入端口，方括号中的数字代表端口号。
 \begin{figure}[ht]
@@ -65,7 +65,7 @@ ClickNP元件类似于面向对象语言中的对象，可以用C++这样的语�
 但现有的很多高级编程工具只支持C语言，而将高级语言转化为C语言的工作是乏味的，
 因此我们采用的是针对定义元件的需要对C语言进行扩展这种途径。
 
-代码~\ref{code:count}是一个包计数器元件的定义。\lstinline$.element$关键字定义元件名称；
+代码~\ref{code:count} 是一个包计数器元件的定义。\lstinline$.element$关键字定义元件名称；
 尖括号内为输入输出端口数；\lstinline$.state$关键字定义本地状态\lstinline$count$计数器；
 \lstinline$.init$关键字定义初始化函数，将\lstinline$count$的初值置零；
 \lstinline$.handler$关键字定义处理函数，每当收到帧的\lstinline$sop$域为真时将计数器加一；
@@ -74,7 +74,7 @@ ClickNP元件类似于面向对象语言中的对象，可以用C++这样的语�
 
 \lstinputlisting[caption=包计数器元件定义, label=code:count]{code/Count.cl}
 
-ClickNP内建了一系列与端口进行数据交互的函数接口，如表~\ref{tab:operations}所示。
+ClickNP内建了一系列与端口进行数据交互的函数接口，如表~\ref{tab:operations} 所示。
 \begin{table}[htbp]
 \centering
 \caption{ClickNP内建接口} \label{tab:operations}
