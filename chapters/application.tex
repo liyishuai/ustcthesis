@@ -12,8 +12,8 @@
 抓包器的设计体现了CPU与FPGA协同工作的重要性。相比于FPGA而言，CPU有更大的存储空间，
 且更容易访问固态硬盘等其他存储器，因而将日志元件部署在CPU上有利于提升性能。
 
-\section{Openflow防火墙(OFW)}
-我们的Openflow防火墙支持对网络流量进行精确匹配及模糊匹配两种工作方式。
+\section{OpenFlow防火墙(OFW)}
+我们的OpenFlow防火墙支持对网络流量进行精确匹配及模糊匹配两种工作方式。
 精确匹配表通过布谷鸟哈希算法实现，支持128K条包头记录。
 模糊匹配基于三态结合存储器(ternary content-addressable memory, TCAM)实现，
 然而实现三态结合存储器的完整功能在FPGA上开销过大，
