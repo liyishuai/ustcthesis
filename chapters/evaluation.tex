@@ -37,3 +37,14 @@ Click+DPDK的处理速率大约可达18Mpps。Click采用了静态决策树来�
 \caption{各防火墙模糊匹配速率对比} \label{fig:ofwrate}
 \note{包大小为64字节}
 \end{figure}
+
+图~\ref{fig:ofwlatload} 展示各防火墙在不同负载下的小包处理延迟。
+鉴于不同防火墙的处理能力差别明显，我们根据系统最大处理速率将负载标准化处理。
+据图可见，在各个负载下，FPGA (ClickNP)和专用集成电路(S6000)的延迟均保持在2微秒以下，
+相比之下软件处理的延迟大得多且不稳定，例如在高负载下Click+DPDK的延迟甚至高达50微秒。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4in]{ofwlatload}
+\caption{不同负载下防火墙处理延迟对比} \label{fig:ofwlatload}
+\note{包大小为64字节，误差杆置信水平为90\%}
+\end{figure}
