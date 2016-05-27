@@ -48,3 +48,18 @@ Click+DPDK的处理速率大约可达18Mpps。Click采用了静态决策树来�
 \caption{不同负载下防火墙处理延迟对比} \label{fig:ofwlatload}
 \note{包大小为64字节，误差杆置信水平为90\%}
 \end{figure}
+
+图~\ref{fig:ofwlatsize} 展示面对不同大小的包时各防火墙的处理延迟。
+据图可见，软件处理包的延迟随包的增大而增加，其主要原因是内存读取的增加。
+相比之下，FPGA和专用集成电路的处理延迟不受包大小的影响。
+\begin{figure}[ht]
+\centering
+\includegraphics[width=4in]{ofwlatsize}
+\caption{各防火墙处理不同大小包延迟对比} \label{fig:ofwlatsize}
+\note{误差杆置信水平为90\%}
+\end{figure}
+
+在所有的测试中，ClickNP OpenFlow防火墙的CPU占用率都低于5\%。我们据此得出的结论是，
+OpenFlow防火墙具有接近专用集成电路的处理性能，且更加灵活、易于重新配置。
+
+\subsection{互联网安全协议网关}
