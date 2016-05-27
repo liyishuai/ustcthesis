@@ -27,7 +27,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 
 一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
 从其一端写入，从另一端读取，如图~\ref{fig:channel} 所示。
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{channel}
 \caption{连接两个元件的通道} \label{fig:channel}
@@ -35,7 +35,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 
 每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
 数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef} 所示。
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{flit}
 \caption{帧结构} \label{fig:flit}
@@ -53,7 +53,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 代码~\ref{code:cfg} 为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
 其开头部分描述该系统依赖的元件类型，随后将元件实例化，并用箭头表示其通道连接关系，
 自左侧元件的输出端口指向右侧元件的输入端口，方括号中的数字代表端口号。
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \lstinputlisting[caption=ClickNP配置文件示例, label=code:cfg]{code/RoCE.cfg}
 \note{第8行\lstinline$host$关键字代表将\lstinline$RoCE_Connector$元件实例化为主机工作线程。

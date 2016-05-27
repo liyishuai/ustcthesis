@@ -12,7 +12,8 @@ ClickNP的模块化架构自然地实现了不同元件之间的并行化，其�
 与逐条执行指令的CPU不同，FPGA通过硬件逻辑执行数据操作。
 如果在一个处理函数中需要对单个数据进行多次操作，高级编程工具会将其转化为多级流水线操作。
 每一时钟周期，将流水线推进一级，并移进新的数据，如图~\ref{fig:pipeline} 所示。
-\begin{figure}[ht]
+
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{pipeline}
 \caption{多级流水线操作} \label{fig:pipeline}

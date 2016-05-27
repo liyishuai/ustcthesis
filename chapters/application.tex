@@ -21,14 +21,14 @@
 因此我们在实现中取而代之采用散列三态结合存储器(hashed ternary content-addressable memory, HASH-TCAM)实现。
 HASH-TCAM将表空间分解为一系列更小的散列表，每个散列表对应一个掩码位，所有输入的包在散列之前都先经过一次按位与操作。
 散列表中每条记录都被赋予优先级，通过仲裁逻辑选出优先级最高的记录，如图~\ref{fig:hashtcam} 所示。
-
-散列三态结合存储器通过在容量方面的让步，节省了大量空间开销。
-在我们的实现中，HASH-TCAM采用16个不同的掩码位，支持16K条流记录。
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{hashtcam}
 \caption{散列三态结合存储器实现模糊匹配规则} \label{fig:hashtcam}
 \end{figure}
+
+散列三态结合存储器通过在容量方面的让步，节省了大量空间开销。
+在我们的实现中，HASH-TCAM采用16个不同的掩码位，支持16K条流记录。
 
 \section{互联网安全协议网关(IPSecGW)}
 软件网络功能面临的一个困难是在IPSec等计算密集型系统中CPU成为性能瓶颈。
@@ -77,7 +77,7 @@ pFabric调度器工作原理较简单：维护一个包含32个包的缓冲优�
 对于入队操作，新包的元数据被转发给所有记录。每条记录将新包与自身及左右邻居的优先级进行比较，
 优先级最低的记录经本地比较后自行被换出。因为所有的本地比较操作可以并行执行，所以入队操作也仅消耗1个时钟周期。
 入队与出队操作也能够实现并行化，因而每个包都只需要1个时钟周期即可处理完成。
-\begin{figure}[ht]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{pfabric}
 \caption{移位寄存器实现pFabric流调度} \label{fig:pfabric}
