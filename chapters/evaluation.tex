@@ -88,12 +88,30 @@ OpenFlow防火墙具有接近专用集成电路的处理性能，且更加灵活
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{l4rate}
-\caption{第4层负载均衡延迟对比} \label{fig:l4rate}
+\caption{第4层负载均衡吞吐率对比} \label{fig:l4rate}
 \note{包大小为64字节}
 \end{figure}
+
 \subsection{第4层负载均衡}
 我们将L4LB同Linux Virtual Server (LVS)进行对比。在压力测试中，我们向单个虚拟IP地址生成了大量并发的UDP流。
 如图~\ref{fig:l4rate} 所示，当并发的流少于8K个时，L4LB吞吐率可以达到链路上限51.2Mpps。
 但随着并发数进一步增加，吞吐率开始下降，这是L4LB流缓存缺失导致的。当遇到缓存缺失时，
 L4LB需要访问一次DDR存储器，因而吞吐率下降到了11Mpps。相比之下，Linux Virtual Server在任何并发数下的吞吐率都很低，
 这是因为LVS将同一虚拟IP地址的所有包均交给同一CPU核来处理，导致吞吐率被限制在200Kpps。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{l4lat}
+\caption{第4层负载均衡延迟对比} \label{fig:l4lat}
+\note{包大小为64字节，并发数为100万}
+\end{figure}
+图~\ref{fig:l4lat} 展示不同负载压力下的负载均衡延迟对比。
+据图可见，在不高于10Mpps的负载下，L4LB的延迟均保持在4微秒以下。
+相比之下，LVS的延迟高达50微秒，且在负载高于其100Kpps的处理能力之后明显增加。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{l4alloc}
+\caption{第4层负载均衡处理能力对比} \label{fig:l4alloc}
+\note{包大小为64字节}
+\end{figure}
