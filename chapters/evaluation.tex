@@ -115,3 +115,18 @@ L4LB需要访问一次DDR存储器，因而吞吐率下降到了11Mpps。相比�
 \caption{第4层负载均衡处理能力对比} \label{fig:l4alloc}
 \note{包大小为64字节}
 \end{figure}
+图~\ref{fig:l4alloc} 展示L4LB与LVS接收新流的能力。我们在实验中让PktGen尽可能多地产生单包的小流。
+据图可见，L4LB每秒钟可以接收1000万个新流，其瓶颈依然是DDR存储器访问。
+而LVS由于包处理能力有限，每秒钟只能接收7.5万个新流。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{pfabriccdf}
+\caption{流调度策略对比} \label{fig:pfabriccdf}
+\note{横轴代表流完成时间 (flow completion time, FCT)，纵轴为累积分布函数 (cumulative distribution function, CDF)。}
+\end{figure}
+
+\section{pFabric调度测试}
+我们通过包生成器在流的空余字节中加入优先级标记，并通过pFabric根据优先级对这些流进行调度。
+图~\ref{fig:pfabriccdf} 展示pFabric、带尾部丢弃策略的TCP、理想情况之间的平均流完成时间对比。
+据图可见，在这一简单的情形下，pFabric的平均流完成时间接近理想情况。
