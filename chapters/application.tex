@@ -21,7 +21,7 @@
 而PCIe接口的数据带宽低于FPGA网卡的带宽，因此缓冲区会被迅速写满，随后不再响应网卡的输入请求。
 
 为了解决这一问题，我对ndping、ndrping的代码进行了修改，将原有的连续发送RDMA请求改为有时间间隔地发送RDMA请求。
-虽然在请求长度较大时仍然会出现阻塞情况，但因为我们的实验侧重于对丢包情况进行分析，
+虽然在请求长度较大时仍然会出现阻塞情况，但因为我们在FPGA上的抓包实验侧重于对丢包情况进行分析，
 因此不需要发送长度太大的RDMA请求。
 
 实验表明，FPGA的抓包结果中确实出现了之前IbDump没有记录下来的包，
@@ -31,6 +31,22 @@
 
 \begin{figure}[htbp]
 \centering
+\includegraphics[width=4in]{roce}
+\caption{RoCEv2各元件及其连接关系} \label{fig:roce}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
 \lstinputlisting[caption={RoCEv2项目的ClickNP配置文件}, label={code:rocecfg}]{code/RoCE.cfg}
 \end{figure}
 \section{项目实现}
+RoCEv2项目包含如下元件：
+\begin{description}
+\item[RoCE\_Classifier包分类器]将收到的包进行分类，将连接相关请求转发至连接管理器，将数据请求转发至适配器。
+\item[RoCE\_Connector连接管理器]根据连接请求，建立、维护、断开连接。
+\item[应用程序]向适配器发起应用RDMA请求。
+\item[RoCE\_Endpoint适配器]与应用程序交互，将用户的请求转发至包生成器，并向应用程序发送反馈。
+\item[RoCE\_Gen包生成器]将连接管理器和适配器发来的请求翻译为网络协议包。
+\end{description}
+
+图~\ref{fig:roce} 展示各元件间的连接关系，其配置文件如代码~\ref{code:rocecfg} 所示。
