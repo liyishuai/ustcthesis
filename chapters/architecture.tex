@@ -1,6 +1,6 @@
 \chapter{ClickNP编程平台介绍}
 \section{系统架构}
-ClickNP基于Catapult Shell体系结构搭建。该体系结构包含PCIe、直接内存访问(direct memory access, DMA)、
+ClickNP基于Catapult Shell体系结构\cite{6853195}搭建。该体系结构包含PCIe、直接内存访问(direct memory access, DMA)、
 内存管理单元(memory management unit, MMU)、以太网介质访问控制(media access control, MAC)等
 适用于多种应用场景的可服用逻辑，并将其抽象为定义好的接口。由ClickNP编写的FPGA程序生成的目标为Catapult功能。
 由于ClickNP依赖的不同高级编程工具生成的目标接口不一致，因此在其下层有一个适配层，

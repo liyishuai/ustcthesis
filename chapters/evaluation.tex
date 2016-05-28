@@ -1,6 +1,6 @@
 \chapter{性能评测}
 \section{实验环境及方法}
-我们在16台戴尔R720服务器上评估ClickNP的性能。每个FPGA都通过2个以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机相连。
+我们在16台戴尔R720服务器上评估ClickNP的性能。每个FPGA都通过2个以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\cite{s6000}相连。
 我们在Windows Server 2012 R2上运行ClickNP。对于在Linux上运行的软件网络功能，我们使用CentOS 7.2平台，其内核版本为3.10。
 
 为了测量网络功能的延迟，我们通过端口2将处理得到的包转发至回声(Echo)服务器。
@@ -13,13 +13,13 @@
 
 \section{数据吞吐率及处理延迟评估}
 \subsection{OpenFlow防火墙}
-我们在实验中将OpenFlow防火墙与Linux防火墙以及Click+DPDK进行对比。
+我们在实验中将OpenFlow防火墙与Linux防火墙以及Click+DPDK\cite{Barbette:2015:FUP:2772722.2772727}进行对比。
 Linux防火墙采用IPSet处理精确匹配规则，采用IPTables处理模糊匹配规则。
 我们在结果中引入了所使用的戴尔S6000交换机的性能作为参照，其防火墙处理能力有限，
 只支持1.7K条模糊匹配规则。
 
 值得一提的是，原先的Click+DPDK不支持接收端扩放(receive side scaling, RSS)。
-我们在实验中修复了这一问题，而且发现Click+DPDK只需要4个核就可达到其最佳性能。
+我们在实验中修复了这一问题，而且发现Click+DPDK\cite{Barbette:2015:FUP:2772722.2772727}只需要4个核就可达到其最佳性能。
 与此同时，对于Linux防火墙，我们需要尽可能地增加核数来提升其性能。
 然而接收端扩放的限制使其最多只能使用8个核。
 
@@ -69,10 +69,10 @@ OpenFlow防火墙具有接近专用集成电路的处理性能，且更加灵活
 \end{figure}
 
 \subsection{互联网安全协议网关}
-我们将IPSecGW与strongSwan进行对比，采用AES-256-CTR算法加密及SHA-1算法认证。
+我们将IPSecGW与strongSwan\cite{strongswan}进行对比，采用AES-256-CTR算法加密及SHA-1算法认证。
 图~\ref{fig:ipsecrate} 展示处理不同大小包的网关吞吐率对比。
 据图可见，IPSecGW的吞吐率可以达到链路带宽，即在处理64字节包时达到28.8Gbps，
-在处理1500字节包时达到37.8Gbps。相比之下，StrongSwan的最大吞吐率仅为628Mbps，
+在处理1500字节包时达到37.8Gbps。相比之下，strongSwan的最大吞吐率仅为628Mbps，
 且随着包大小的减小而降低。这是因为需要处理的包数随着包大小的减小而增加，
 因而系统需要计算更多SHA-1签名。
 
@@ -93,7 +93,7 @@ OpenFlow防火墙具有接近专用集成电路的处理性能，且更加灵活
 \end{figure}
 
 \subsection{第4层负载均衡}
-我们将L4LB同Linux Virtual Server (LVS)进行对比。在压力测试中，我们向单个虚拟IP地址生成了大量并发的UDP流。
+我们将L4LB同Linux Virtual Server (LVS)\cite{lvs}进行对比。在压力测试中，我们向单个虚拟IP地址生成了大量并发的UDP流。
 如图~\ref{fig:l4rate} 所示，当并发的流少于8K个时，L4LB吞吐率可以达到链路上限51.2Mpps。
 但随着并发数进一步增加，吞吐率开始下降，这是L4LB流缓存缺失导致的。当遇到缓存缺失时，
 L4LB需要访问一次DDR存储器，因而吞吐率下降到了11Mpps。相比之下，Linux Virtual Server在任何并发数下的吞吐率都很低，
@@ -127,6 +127,6 @@ L4LB需要访问一次DDR存储器，因而吞吐率下降到了11Mpps。相比�
 \end{figure}
 
 \section{pFabric调度测试}
-我们通过包生成器在流的空余字节中加入优先级标记，并通过pFabric根据优先级对这些流进行调度。
+我们通过包生成器在流的空余字节中加入优先级标记，并通过pFabric算法\cite{Alizadeh:2013:PMN:2486001.2486031}根据优先级对这些流进行调度。
 图~\ref{fig:pfabriccdf} 展示pFabric、带尾部丢弃策略的TCP、理想情况之间的平均流完成时间对比。
 据图可见，在这一简单的情形下，pFabric的平均流完成时间接近理想情况。
