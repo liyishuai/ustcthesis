@@ -1,7 +1,12 @@
 \chapter{RoCEv2的ClickNP实现}
 \section{对RoCEv2协议进行抓包分析}
 为了充分了解RoCEv2协议，我们利用微软亚洲研究院程鹏研究员基于NetDirect开发的ndping、ndrping工具发送RoCEv2包，
-并使用IbDump工具对其进行抓包分析。
+并使用IbDump工具对其进行抓包，用Wireshark进行分析。
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{capture}
+\caption{利用Wireshark抓包分析} \label{fig:capture}
+\end{figure}
 
 我们的实验在与同一交换机相连的两台之间进行，期间基本不存在丢包的情况，
 所以初期我们只能抓到无丢包情况下的包。
@@ -39,6 +44,12 @@
 \centering
 \lstinputlisting[caption=RoCEv2项目的ClickNP配置文件, label=code:rocecfg]{code/RoCE.cfg}
 \end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{roceapi}
+\caption{应用程序与适配器之间的5条通道} \label{fig:roceapi}
+\end{figure}
 \section{项目实现}
 \subsection{总体设计}
 RoCEv2项目包含如下元件：
@@ -51,6 +62,8 @@ RoCEv2项目包含如下元件：
 \end{description}
 
 图~\ref{fig:roce} 展示各元件间的连接关系，其配置文件如代码~\ref{code:rocecfg} 所示。
+
+应用程序与适配器之间的5条通道功能如图~\ref{fig:roceapi} 所示。
 
 \subsection{包生成器设计}
 我设计的包生成器有2个输入端口和1个输出端口。
@@ -65,6 +78,7 @@ RoCEv2项目包含如下元件：
 
 包生成器的大致框架如代码~\ref{code:rocegen} 所示。
 \lstinputlisting[caption=RoCE\_Gen包生成器示意,label=code:rocegen]{code/RoCE_Gen.cl}
+
 截至我从微软亚洲研究院离职时，包生成器已实现CM ConnectionReply、CM ReadyToUse、
 Acknowledge、RC RDMA Read Request等功能，代码量不足八百行，
 预计实现全部功能只需要四千行代码。
