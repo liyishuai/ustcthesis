@@ -3,10 +3,10 @@
   现有的基于通用服务器的软件处理网络包面临高延迟、低吞吐率等问题，
   而场效可编程门阵列(field-programmable gate array, FPGA)
   具有高性能、高并行、低能耗等特点，更符合软件定义网络的计算需求。
-  本文针对五个数据中心网络应用，使用FPGA平台进行性能优化及评测，
-  以提升其带宽并降低延迟。
+  本文基于微软亚洲研究院开发的ClickNP编程工具分析、设计并测试RDMA协议，
+  以验证其代替PCIe接口进行主机与FPGA之间部分数据通信的可行性。
 
-  \keywords{数据中心网络\zhspace{} 软件定义网络\zhspace{} 场效可编程门阵列}
+  \keywords{数据中心网络\zhspace{} 软件定义网络\zhspace{} 场效可编程门阵列\zhspace{} 远程直接数据存取}
 \end{abstract}
 
 \begin{enabstract}
@@ -14,6 +14,8 @@
   However, commodity servers are faced with high latency and limited capacity when processing software packets.
   In comarison, field-programmable gate arrays show advantage in performance, parallelizability and power efficiency,
   which fits the need of software-defined networking.
-  This article is to optimize and evaluate five data center network applications with the FPGA platform.
-\enkeywords{data center network, software-defined networking, FPGA}
+  This article is to analyze, implement and evaluate the RDMA protocol with the ClickNP framework
+  developed by Microsoft Research Asia,
+  to verify the feasibility of RDMA to replace the PCIe channel in some host-FPGA data communications.
+\enkeywords{data center network, software-defined networking, FPGA, RDMA}
 \end{enabstract}
