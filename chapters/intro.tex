@@ -30,7 +30,7 @@
 这些困难导致多年来很多人远离FPGA编程\cite{Bacon:2013:FPM:2436256.2436271}。
 
 本文借助微软亚洲研究院无线与网络研究组最新开发的ClickNP平台\cite{clicknp}进行FPGA编程，
-针对数据中心网络场景优化了包生成器及抓包器、OpenFlow防火墙、IPSec网关、L4负载均衡、pFabric流调度器等应用，
+对基于融合以太网的远程直接数据存取(remote direct memory access over converged Ethernet)协议进行分析和实现，
 并对其性能进行评测。
 
 \section{场效可编程门阵列体系结构}
@@ -57,7 +57,7 @@ FPGA到单个块存储器和外部的动态存储器的带宽约为2\textasciiti
 为了减轻编程负担，工业界与学术界均有开发高级编程工具，将以C语言为主的高级语言编写的程序转化为硬件程序。
 其中包括微软亚洲研究院无线与网络研究组开发的ClickNP编程平台\cite{clicknp}。
 
-\section{RoCEv2远程直接数据存取协议}
+\chapter{远程直接数据存取协议}
 \subsection{直接数据存取}
 直接数据存取 (direct memory access, DMA) 是现代计算机系统中常见的访存方式，
 这种方式使外围设备可以不经CPU而直接访问存储器。
@@ -75,73 +75,3 @@ FPGA到单个块存储器和外部的动态存储器的带宽约为2\textasciiti
 
 RDMA设备接收到特定的数据包之后不再交由操作系统处理，而直接根据其请求访问本地存储器并进行反馈。
 而CPU只负责初始化和结束RDMA设备，在数据传输过程中不会收到中断请求。
-
-\subsection{RoCE协议}
-基于融合以太网络的RDMA (RDMA over Converged Ethernet, RoCE) 协议允许设备间通过以太网络进行远程直接内存访问。
-该协议由两个版本，分别称为RoCEv1和RoCEv2。其中RoCEv1将以太网协议作为其链路层该协议，
-因而允许在同一个以太网广播域下的任意两台主机间进行通信\cite{a16}。
-RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可以经过路由\cite{a17, considerations, storage}。
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocereq}
-\caption{建立RoCE连接} \label{fig:rocereq}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocerej}
-\caption{建立RoCE连接被拒绝} \label{fig:rocerej}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocedreq}
-\caption{断开RoCE连接} \label{fig:rocedreq}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocewriteonly}
-\caption{单RoCE包写操作} \label{fig:rocewriteonly}
-\note{在数据载荷不多于1024字节时的写请求只包含单包，数据发送请求的工作过程与之类似。}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocewritemany}
-\caption{多RoCE包写操作} \label{fig:rocewritemany}
-\note{对于超过1024字节的数据载荷，先后发送Write First、Write Middle (如有)、Write Last三种包。
-自Write First起，接收端每收到256个包反馈一个确认包，也对最后一个包进行反馈，
-数据发送请求的工作过程与之类似。}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocereadonly}
-\caption{单RoCE包读操作} \label{fig:rocereadonly}
-\note{在数据载荷不多于1024字节时读响应至包含单包}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocereadmany}
-\caption{多RoCE包读操作} \label{fig:rocereadmany}
-\note{对于超过1024字节的数据载荷，先后发送Read Response First、Read Response Middle (如有)、
-Read Response Last三种包。自Read Response First起，接收端没收到256个包反馈一个确认包，
-也对最后一个包进行反馈。}
-\end{figure}
-
-用户可通过RoCE协议发起读数据、写数据、发送数据三种请求。
-其工作过程如图~\ref{fig:rocereq}、图~\ref{fig:rocerej}、图~\ref{fig:rocedreq}、
-图~\ref{fig:rocewriteonly}、图~\ref{fig:rocewritemany}、图~\ref{fig:rocereadonly}所示。
-
-面对网络中可能出现的丢包情况，RoCE协议具有与TCP/IP类似的重传策略：
-对每个消息赋予一个包序列号。如果接收端收到的包序列号不连续，则反馈缺失消息，
-并提供缺失的第一个包序列号。发送端从该序列号对应的包开始重传，如图~\ref{fig:rocewritenak} 所示。
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocewritenak}
-\caption{RoCE重传策略} \label{fig:rocewritenak}
-\end{figure}
-

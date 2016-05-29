@@ -1,6 +1,7 @@
-\chapter{背景介绍：ClickNP编程工具}
+\chapter{背景介绍}
+\section{ClickNP编程工具}
 ClickNP是微软亚洲研究院开发的FPGA编程工具\cite{clicknp}。
-\section{系统架构}
+\subsection{系统架构}
 ClickNP基于Catapult Shell体系结构\cite{6853195}搭建。该体系结构包含PCIe、直接内存访问(direct memory access, DMA)、
 内存管理单元(memory management unit, MMU)、以太网介质访问控制(media access control, MAC)等
 适用于多种应用场景的可服用逻辑，并将其抽象为定义好的接口。由ClickNP编写的FPGA程序生成的目标为Catapult功能。
@@ -15,8 +16,8 @@ ClickNP库主要实现两个重要的功能：主机与FPGA之间的高速低延
 启动工作进程、根据配置初始化FPGA和CPU中的ClickNP元件以及在运行时通过想各个元件发送信号来控制其行为。
 在CPU的指派下，每个工作线程可以处理多个任务。
 
-\section{程序设计}
-\subsection{概念抽象}
+\subsection{程序设计}
+\subsubsection{概念抽象}
 ClickNP提供了模块化的编程模型，以元件为基本处理模块。每个元件包括以下属性：
 \begin{description}
 \item[本地状态]每个元件可定义一系列仅由自身访问的本地状态；
@@ -61,7 +62,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 @表示该元件接收主机发来的信号。\lstinline$from_tor$和\lstinline$to_tor$分别为FPGA网卡的输出和输入端口。}
 \end{figure}
 
-\subsection{编程语言}
+\subsubsection{编程语言}
 ClickNP元件类似于面向对象语言中的对象，可以用C++这样的语言定义。
 但现有的很多高级编程工具只支持C语言，而将高级语言转化为C语言的工作是乏味的，
 因此我们采用的是针对定义元件的需要对C语言进行扩展这种途径。
@@ -102,7 +103,7 @@ ClickNP内建了一系列与端口进行数据交互的函数接口，如表~\re
 \end{tabular}
 \end{table}
 
-\subsection{编译工具链}
+\subsubsection{编译工具链}
 ClickNP工具链以ClickNP编译器为前端，以Visual Studio、GCC等C/C++编译器、
 Altera OpenCL SDK、Xilinx Vidado HLS等高级编程工具为后端。
 开发人员需要完成三部分工作：
@@ -115,3 +116,74 @@ Altera OpenCL SDK、Xilinx Vidado HLS等高级编程工具为后端。
 以上三部分源程序由ClickNP编译器翻译为主机程序和FPGA程序两部分中间代码。
 前者可由普通的C/C++编译器编译为目标文件，
 后者需要由商业化高级编程工具合成为FPGA目标文件。
+
+\input{chapters/parallel}
+
+\section{RoCE协议}
+基于融合以太网络的RDMA (RDMA over Converged Ethernet, RoCE) 协议允许设备间通过以太网络进行远程直接内存访问。
+该协议由两个版本，分别称为RoCEv1和RoCEv2。其中RoCEv1将以太网协议作为其链路层该协议，
+因而允许在同一个以太网广播域下的任意两台主机间进行通信\cite{a16}。
+RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可以经过路由\cite{a17, considerations, storage}。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocereq}
+\caption{建立RoCE连接} \label{fig:rocereq}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocerej}
+\caption{建立RoCE连接被拒绝} \label{fig:rocerej}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocedreq}
+\caption{断开RoCE连接} \label{fig:rocedreq}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocewriteonly}
+\caption{单RoCE包写操作} \label{fig:rocewriteonly}
+\note{在数据载荷不多于1024字节时的写请求只包含单包，数据发送请求的工作过程与之类似。}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocewritemany}
+\caption{多RoCE包写操作} \label{fig:rocewritemany}
+\note{对于超过1024字节的数据载荷，先后发送Write First、Write Middle (如有)、Write Last三种包。
+自Write First起，接收端每收到256个包反馈一个确认包，也对最后一个包进行反馈，
+数据发送请求的工作过程与之类似。}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocereadonly}
+\caption{单RoCE包读操作} \label{fig:rocereadonly}
+\note{在数据载荷不多于1024字节时读响应至包含单包}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocereadmany}
+\caption{多RoCE包读操作} \label{fig:rocereadmany}
+\note{对于超过1024字节的数据载荷，先后发送Read Response First、Read Response Middle (如有)、
+Read Response Last三种包。自Read Response First起，接收端没收到256个包反馈一个确认包，
+也对最后一个包进行反馈。}
+\end{figure}
+
+用户可通过RoCE协议发起读数据、写数据、发送数据三种请求。
+其工作过程如图~\ref{fig:rocereq}、图~\ref{fig:rocerej}、图~\ref{fig:rocedreq}、
+图~\ref{fig:rocewriteonly}、图~\ref{fig:rocewritemany}、图~\ref{fig:rocereadonly}所示。
+
+面对网络中可能出现的丢包情况，RoCE协议具有与TCP/IP类似的重传策略：
+对每个消息赋予一个包序列号。如果接收端收到的包序列号不连续，则反馈缺失消息，
+并提供缺失的第一个包序列号。发送端从该序列号对应的包开始重传，如图~\ref{fig:rocewritenak} 所示。
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocewritenak}
+\caption{RoCE重传策略} \label{fig:rocewritenak}
+\end{figure}

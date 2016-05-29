@@ -1,6 +1,22 @@
 \chapter{性能测试}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{connect}
+\caption{实验环境示意} \label{fig:connect}
+\end{figure}
 我们在运行Windows Server 2012 R2的戴尔R720服务器上评估ClickNP的性能。
 FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\cite{s6000}相连。
+如图~\ref{fig:connect} 所示，主机通过网卡发出的RDMA包，经FPGA丢包及记录，由交换机到达接收端。
+
+我们在主机上运行ndping、ndrping等程序，进行RDMA读、写、发送等数据操作，
+测量其通信带宽及延迟，并与PCIe接口通信进行对比。
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=4in]{rocerate}
+\caption{RDMA Send与PCIe接口通信带宽对比} \label{fig:rocerate}
+\note{实验中Send、Read、Write的性能没有明显差异，故只列出Send的数据}
+\end{figure}
 
 \begin{figure}[htbp]
 \centering
@@ -12,13 +28,6 @@ FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\c
 \centering
 \includegraphics[width=4in]{rocelatlog}
 \caption{RDMA Send与PCIe接口通信延迟对比（对数纵坐标）} \label{fig:rocelatlog}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=4in]{rocerate}
-\caption{RDMA Send与PCIe接口通信带宽对比} \label{fig:rocerate}
-\note{实验中Send、Read、Write的性能没有明显差异，故只列出Send的数据}
 \end{figure}
 
 实验结果表明，RoCE能够有效利用网卡的通信带宽，实现比PCIe接口更高的传输速率以及更低的延迟。
