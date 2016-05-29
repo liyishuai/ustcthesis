@@ -57,6 +57,17 @@ FPGA到单个块存储器和外部的动态存储器的带宽约为2\textasciiti
 为了减轻编程负担，工业界与学术界均有开发高级编程工具，将以C语言为主的高级语言编写的程序转化为硬件程序。
 其中包括微软亚洲研究院无线与网络研究组开发的ClickNP编程平台\cite{clicknp}。
 
+FPGA上的程序在工作中，有时需要访问主机内存。然而目前通过PCIe访存面临如下限制：
+\begin{enumerate}
+\item 我们使用的FPGA只支持PCI Express 2.0\cite{pcie}接口，其传输速率较慢，为32Gbps，在实际测试中则为25.6Gbps；
+\item 在我们的FPGA中，直接数据存取控制器不支持发散汇聚映射\cite{chapter3}；
+\item 我们使用的FPGA不支持单源输入输出虚拟化 (single-root I/O virtualization, SR-IOV)\cite{irsov}，
+因而无法部署在虚拟机上。
+\end{enumerate}
+
+基于融合以太网的远程直接数据存取协议 (RoCE)是一项成熟的技术。本文旨在以兼容RoCE的网卡为代理，
+让FPGA上的应用更加高速低延迟地访问主机存储器。
+
 \chapter{远程直接数据存取协议}
 \subsection{直接数据存取}
 直接数据存取 (direct memory access, DMA) 是现代计算机系统中常见的访存方式，

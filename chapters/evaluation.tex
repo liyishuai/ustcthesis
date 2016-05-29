@@ -4,7 +4,7 @@
 \includegraphics[width=4in]{connect}
 \caption{实验环境示意} \label{fig:connect}
 \end{figure}
-我们在运行Windows Server 2012 R2的戴尔R720服务器上评估ClickNP的性能。
+我们在运行Windows Server 2012 R2的戴尔R720服务器上评估RoCE的性能。
 FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\cite{s6000}相连。
 如图~\ref{fig:connect} 所示，主机通过网卡发出的RDMA包，经FPGA丢包及记录，由交换机到达接收端。
 
@@ -15,7 +15,7 @@ FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\c
 \centering
 \includegraphics[width=4in]{rocerate}
 \caption{RDMA Send与PCIe接口通信带宽对比} \label{fig:rocerate}
-\note{实验中Send、Read、Write的性能没有明显差异，故只列出Send的数据}
+\note{实验中Send、Read、Write之间的性能差异在误差范围内，故只列出Send的数据}
 \end{figure}
 
 据图~\ref{fig:rocerate} 可见，随着包的增大，单位时间内需要处理的包数目减少，

@@ -8,6 +8,11 @@
 \caption{利用Wireshark抓包分析} \label{fig:capture}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\lstinputlisting[caption=丢包器的ClickNP实现, label=code:drop]{code/PacketDrop.cl}
+\end{figure}
+
 我们的实验在与同一交换机相连的两台之间进行，期间基本不存在丢包的情况，
 所以初期我们只能抓到无丢包情况下的包。
 
@@ -17,7 +22,8 @@
 将丢包率调整为10\%左右时，可以较好地观察到丢包与重传时所发的包。
 
 在抓包的过程中，我们发现一些根据协议本应出现的包没有被观察到，
-并据此猜测IbDump没有将流经网卡的包全部记录下来。
+例如接收端检测到丢包后会反馈包缺失，而该包在发送端日志中没有体现，
+但发送端的重传行为就好像收到了这样的反馈。我们据此猜测IbDump没有将流经网卡的包全部记录下来。
 
 为了验证这一猜测，我们改在FPGA上抓包。在丢包器的下游增设抓包器，在记录包的同时将其发出。
 
@@ -34,10 +40,14 @@
 
 在IbDump与FPGA两个抓包工具获取到的日志基础上进行分析，使我们加深了对RoCEv2协议的认识。
 
+\section{项目实现}
+\subsection{总体设计}
+RoCEv2项目包含如下元件：
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{roce}
 \caption{RoCEv2各元件及其连接关系} \label{fig:roce}
+\note{红框内为我们项目的实现细节，对应用程序是透明的。}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -50,14 +60,12 @@
 \includegraphics[width=4in]{roceapi}
 \caption{应用程序与适配器之间的5条通道} \label{fig:roceapi}
 \end{figure}
-\section{项目实现}
-\subsection{总体设计}
-RoCEv2项目包含如下元件：
+
 \begin{description}
 \item[RoCE\_Classifier包分类器]将收到的包进行分类，将连接相关请求转发至连接管理器，将数据请求转发至适配器。
 \item[RoCE\_Connector连接管理器]根据连接请求，建立、维护、断开连接。
-\item[应用程序]向适配器发起应用RDMA请求。
-\item[RoCE\_Endpoint适配器]与应用程序交互，将用户的请求转发至包生成器，并向应用程序发送反馈。
+\item[应用程序]向终端发起应用RDMA请求。
+\item[RoCE\_Endpoint终端]与应用程序交互，将用户的请求转发至包生成器，并向应用程序发送反馈。
 \item[RoCE\_Gen包生成器]将连接管理器和适配器发来的请求翻译为网络协议包。
 \end{description}
 
@@ -67,13 +75,13 @@ RoCEv2项目包含如下元件：
 
 \subsection{包生成器设计}
 我设计的包生成器有2个输入端口和1个输出端口。
-其中输入端口1与适配器相连，输入端口2与连接管理器相连；输出端口与网卡相连。
+其中输入端口1与终端相连，输入端口2与连接管理器相连；输出端口与网卡相连。
 
 当输入端口有收到发包请求时，包生成器根据收到的元数据填写待发送帧的各个域，
 并维护其操作码及序列号两个状态，每周期处理一帧，直到最后一帧发送完毕，读取下一个请求。
 
-值得一提的是，由于元数据帧的信息密度大于要发送的帧，
-所以只要输入端有源源不断的发包请求，输出端就不会忙等，
+在该协议的实现中，终端向包生成器发送的元数据帧信息量总是足以供包生成器填充等量要发送的帧。
+所以只要输入端有源源不断的发包请求，包生成器在每个周期就都会有帧输出。
 不需要手工维护多级流水线及其缓冲区即可充分利用设备的吞吐率。
 
 包生成器的大致框架如代码~\ref{code:rocegen} 所示。
