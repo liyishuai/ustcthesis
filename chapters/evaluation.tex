@@ -18,8 +18,9 @@ FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\c
 \note{实验中Send、Read、Write的性能没有明显差异，故只列出Send的数据}
 \end{figure}
 
-据图~\ref{fig:rocerate} 可见，随着包的增大，PCIe与RDMA均达到其带宽上限。
-而RDMA的通信带宽高于PCIe接口。
+据图~\ref{fig:rocerate} 可见，随着包的增大，单位时间内需要处理的包数目减少，
+系统从计算密集向数据密集转变，PCIe与RDMA均达到其带宽上限。
+RDMA的通信带宽为40Gbps（实际中为36Gbps），高于PCIe接口的32Gbps（实际中25.6Gbps）。
 
 \begin{figure}[htbp]
 \centering
@@ -32,6 +33,9 @@ FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\c
 \includegraphics[width=4in]{rocelatlog}
 \caption{RDMA Send与PCIe接口通信延迟对比（对数纵坐标）} \label{fig:rocelatlog}
 \end{figure}
+
+据图~\ref{fig:rocelat}、图~\ref{fig:rocelatlog}可见，随着包的增大，帧数增多，
+处理所需的周期数线性增加，在通信延迟上也得到了体现。
 
 实验结果表明，RoCE能够有效利用网卡的通信带宽，实现比PCIe接口更高的传输速率以及更低的延迟。
 使用RoCE替代PCIe通信能够提升FPGA的存储性能。
