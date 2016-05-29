@@ -18,6 +18,9 @@ FPGA通过以太网端口与机架顶(top-of-rack, ToR)的戴尔S6000交换机\c
 \note{实验中Send、Read、Write的性能没有明显差异，故只列出Send的数据}
 \end{figure}
 
+据图~\ref{fig:rocerate} 可见，随着包的增大，PCIe与RDMA均达到其带宽上限。
+而RDMA的通信带宽高于PCIe接口。
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocelat}
