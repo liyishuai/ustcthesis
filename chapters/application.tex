@@ -8,10 +8,7 @@
 \caption{利用Wireshark抓包分析} \label{fig:capture}
 \end{figure}
 
-\begin{figure}[htbp]
-\centering
-\lstinputlisting[caption=丢包器的ClickNP实现, label=code:drop]{code/PacketDrop.cl}
-\end{figure}
+\lstinputlisting[float, floatplacement=htbp, caption=丢包器的ClickNP实现, label=code:drop]{code/PacketDrop.cl}
 
 我们的实验在与同一交换机相连的两台之间进行，期间基本不存在丢包的情况，
 所以初期我们只能抓到无丢包情况下的包。
@@ -49,10 +46,7 @@ RoCEv2项目包含如下元件：
 \note{红框内为我们项目的实现细节，对应用程序是透明的。}
 \end{figure}
 
-\begin{figure}[htbp]
-\centering
-\lstinputlisting[caption=RoCEv2项目的ClickNP配置文件, label=code:rocecfg]{code/RoCE.cfg}
-\end{figure}
+\lstinputlisting[float, floatplacement=htbp, caption=RoCEv2项目的ClickNP配置文件, label=code:rocecfg]{code/RoCE.cfg}
 
 \begin{figure}[htbp]
 \centering
@@ -82,11 +76,12 @@ RoCEv2项目包含如下元件：
 不需要手工维护多级流水线及其缓冲区即可充分利用设备的吞吐率。
 
 包生成器的大致框架如代码~\ref{code:rocegen} 所示。
-\lstinputlisting[caption=RoCE\_Gen包生成器示意,label=code:rocegen]{code/RoCE_Gen.cl}
-
 截至我从微软亚洲研究院离职时，包生成器已实现CM ConnectionReply、CM ReadyToUse、
 Acknowledge、RC RDMA Read Request等功能，代码量不足八百行，
 预计实现全部功能只需要四千行代码。
 
 另外，看似比较大的代码量不代表程序效率低下。因为同一个分支内不存在数据依赖，
 所以这些代码在FPGA中很容易实现并行化，可以认为是同时执行。
+
+\newpage
+\lstinputlisting[caption=RoCE\_Gen包生成器示意,label=code:rocegen]{code/RoCE_Gen.cl}

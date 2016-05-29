@@ -27,23 +27,25 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 在元件从主机进程收到信号时被调用，处理指令。
 \end{description}
 
-一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
-从其一端写入，从另一端读取，如图~\ref{fig:channel} 所示。
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{channel}
 \caption{连接两个元件的通道} \label{fig:channel}
 \end{figure}
 
-每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
-数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef} 所示。
+一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
+从其一端写入，从另一端读取，如图~\ref{fig:channel} 所示。
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{flit}
 \caption{帧结构} \label{fig:flit}
 \end{figure}
 
-\lstinputlisting[caption=帧成员定义, label=code:flitdef]{code/flit.cl}
+\lstinputlisting[float, floatplacement=htbp, caption=帧成员定义, label=code:flitdef]{code/flit.cl}
+
+每次通道读写操作的基本单位为帧，每个帧的大小固定为64字节，其中头部包含元数据，
+数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef} 所示。
 
 以完整包为代表的大段数据会被拆分为多个帧在元件之间传播。
 其中第一帧的包开始位(start of packet, \lstinline$sop$)置为真，
@@ -51,9 +53,8 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 如果数据载荷小于32字节，那么最后一帧的留白(padding, \lstinline$pad$)域指代载荷的尾部留白区段大小。
 将大的包拆分为帧，不仅能够降低延迟，还有助于提升处理包数据的各级流水线之间并行化程度。
 
-在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统，
-代码~\ref{code:cfg} 为一个远程直接内存访问(remote direct memory access, RDMA)处理器的配置文件，
-其开头部分描述该系统依赖的元件类型，随后将元件实例化，并用箭头表示其通道连接关系，
+在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统。
+代码~\ref{code:cfg} 是一个抓包器的配置文件，其开头部分将元件实例化，随后箭头表示其通道连接关系，
 自左侧元件的输出端口指向右侧元件的输入端口，方括号中的数字代表端口号。
 \begin{figure}[htbp]
 \centering
@@ -67,10 +68,7 @@ ClickNP元件类似于面向对象语言中的对象，可以用C++这样的语�
 但现有的很多高级编程工具只支持C语言，而将高级语言转化为C语言的工作是乏味的，
 因此我们采用的是针对定义元件的需要对C语言进行扩展这种途径。
 
-\begin{figure}[htbp]
-\centering
-\lstinputlisting[caption=包计数器元件定义, label=code:count]{code/Count.cl}
-\end{figure}
+\lstinputlisting[float, floatplacement=htbp, caption=包计数器元件定义, label=code:count]{code/Count.cl}
 代码~\ref{code:count} 是一个包计数器元件的定义。\lstinline$.element$关键字定义元件名称；
 尖括号内为输入输出端口数；\lstinline$.state$关键字定义本地状态\lstinline$count$计数器；
 \lstinline$.init$关键字定义初始化函数，将\lstinline$count$的初值置零；
