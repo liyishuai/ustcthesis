@@ -385,7 +385,7 @@
         format = \centering\sffamily\bfseries\setfontsize{16bp},
         nameformat = {},
         titleformat = {},
-        number = \chinese{chapter},
+        number = \arabic{chapter},
         beforeskip = 24bp,
         afterskip = 18bp,
     },
