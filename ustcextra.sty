@@ -63,5 +63,13 @@
 \renewcommand{\lstlistlistingname}{代码索引}
 \renewcommand{\lstlistingname}{代码}
 \endinput
+% list 行间距减为零
+\usepackage{paralist}
+\let\itemize\compactitem
+\let\enditemize\endcompactitem
+\let\enumerate\compactenum
+\let\endenumerate\endcompactenum
+\let\description\compactdesc
+\let\enddescription\endcompactdesc
 %%
 %% End of file `ustcextra.sty'.
