@@ -20,6 +20,7 @@
     }
     .init {
         // initialize the states
+        // some code
     }
     .handler {
         if (opcode == OP_CMREP) {

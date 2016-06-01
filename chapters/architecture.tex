@@ -59,8 +59,9 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \begin{figure}[htbp]
 \centering
 \lstinputlisting[caption=ClickNP配置文件示例, label=code:cfg]{code/sample.cfg}
-\note{\lstinline$host$关键字代表将\lstinline$Count$元件实例化为主机工作线程，
-@表示该元件接收主机发来的信号。\lstinline$from_tor$和\lstinline$to_tor$分别为FPGA网卡的输出和输入端口。}
+\note{@符号表示计数器\lstinline$cnt$从主机接收信号。
+\lstinline$host$关键字代表将\lstinline$PktLogger$元件实例化为主机工作线程。
+\lstinline$from_tor$和\lstinline$to_tor$分别为FPGA中网卡的输出和输入端口。}
 \end{figure}
 
 \subsubsection{编程语言}
@@ -119,7 +120,7 @@ Altera OpenCL SDK、Xilinx Vidado HLS等高级编程工具为后端。
 
 \section{RoCE协议}
 基于融合以太网络的RDMA (RDMA over Converged Ethernet, RoCE) 协议允许设备间通过以太网络进行远程直接内存访问。
-该协议由两个版本，分别称为RoCEv1和RoCEv2。其中RoCEv1将以太网协议作为其链路层该协议，
+该协议有两个版本，分别称为RoCEv1和RoCEv2。其中RoCEv1将以太网协议作为其链路层协议，
 因而允许在同一个以太网广播域下的任意两台主机间进行通信\cite{a16}。
 RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可以经过路由\cite{a17, considerations, storage}。
 
