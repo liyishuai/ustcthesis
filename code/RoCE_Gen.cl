@@ -92,11 +92,7 @@
             // read from RoCE_Connector via PORT_2
             if (get_input_port() & PORT_2) {
                 gm.raw = read_input_port(PORT_2);
-                if (gm.data.opcode == OP_CMREQ1) {
-                }
-                else if (gm.data.opcode == OP_CMREQ2) {
-                }
-                else if (gm.data.opcode == OP_CMREP) {
+                if (gm.data.opcode == OP_CMREP) {
                     opcode = OP_CMREP;
                     flit_count = 1;
                     Flit0Header f;
@@ -113,6 +109,12 @@
                     ns.flit.fd.data     = f.raw;
                     set_output_port(PORT_1, ns.raw);
                     return PORT_ALL;
+                }
+                else if (gm.data.opcode == OP_CMREQ1) {
+                    // similar to above
+                }
+                else if (gm.data.opcode == OP_CMREQ2) {
+                    // similar to above
                 }
                 else if (gm.data.opcode == OP_CMRTU) {
                     // similar to above
