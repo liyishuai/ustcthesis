@@ -5,22 +5,22 @@
 %% The original source files were:
 %%
 %% ustcthesis.dtx  (with options: `class')
-%% 
+%%
 %% Copyright (C) 2015-2016 by Zeping Lee <zepinglee AT gmail.com>
-%% 
+%%
 %% This file may be distributed and/or modified under the
 %% conditions of the LaTeX Project Public License, either
 %% version 1.2 of this license or (at your option) any later
 %% version. The latest version of this license is in:
-%% 
+%%
 %%     http://www.latex-project.org/lppl.txt
-%% 
+%%
 %% and version 1.2 or later is part of all distributions of
 %% LaTeX version 1999/12/01 or later.
-%% 
+%%
 \NeedsTeXFormat{LaTeX2e}[1999/12/01]
 \ProvidesClass{ustcthesis}
-    [2016/05/27 v2.1.3 USTC thesis template]
+    [2016/05/30 v2.1.3 USTC thesis template]
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{family=ustc@opt, prefix=ustc@opt@, setkeys=\kvsetkeys}
 \DeclareBoolOption[false]{doctor}
@@ -396,7 +396,7 @@
         format = \centering\sffamily\bfseries\setfontsize{16bp},
         nameformat = {},
         titleformat = {},
-        number = \chinese{chapter},
+        number = \arabic{chapter},
         beforeskip = 24bp,
         afterskip = 18bp,
     },
@@ -412,6 +412,8 @@
     },
     subsubsection = {
         format = \raggedright\sffamily\setfontsize{12bp},
+        number = \arabic{subsubsection},
+        name = {,.},
         beforeskip = 12bp,
         afterskip = 6bp,
     }

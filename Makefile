@@ -1,4 +1,4 @@
-.PHONY : main cls doc clean all inst install distclean zip FORCE_MAKE
+﻿.PHONY : main cls doc clean all inst install distclean zip FORCE_MAKE
 
 NAME = ustcthesis
 UTREE = $(shell kpsewhich --var-value TEXMFHOME)
@@ -40,10 +40,11 @@ install : cls doc
 	sudo cp $(NAME).pdf $(LOCAL)/doc/latex/$(NAME)
 
 zip : cls doc
-	ln -sf . $(NAME)
-	zip -rq ../$(NAME).zip $(NAME)/{$(NAME).{dtx,cls,pdf} ustc*.bst README.md \
-	main.tex ustcextra.sty bib chapters figures .latexmkrc Makefile}
-	rm $(NAME)
+	mkdir $(NAME)
+	cp -r $(NAME).{dtx,cls,pdf} ustc*.bst README.md main.tex ustcextra.sty \
+		bib chapters figures .latexmkrc Makefile $(NAME)
+	zip -r ../$(NAME).zip $(NAME)
+	rm -r $(NAME)
 
 wordcount:
 	@perl texcount.pl main.tex -inc          | awk '/total/ {getline; print "词数    :",$$4}' 
