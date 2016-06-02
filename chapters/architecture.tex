@@ -172,7 +172,7 @@ RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可�
 \centering
 \includegraphics[width=4in]{rocereadonly}
 \caption{单RoCE包读操作}\label{fig:rocereadonly}
-\note{在数据载荷不多于1024字节时读响应至包含单包}
+\note{在数据载荷不多于1024字节时读响应只包含单包}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -180,7 +180,7 @@ RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可�
 \includegraphics[width=4in]{rocereadmany}
 \caption{多RoCE包读操作}\label{fig:rocereadmany}
 \note{对于超过1024字节的数据载荷，先后发送Read Response First、Read Response Middle (如有)、
-Read Response Last三种包。自Read Response First起，接收端没收到256个包反馈一个确认包，
+Read Response Last三种包。自Read Response First起，接收端每收到256个包反馈一个确认包，
 也对最后一个包进行反馈。}
 \end{figure}
 
