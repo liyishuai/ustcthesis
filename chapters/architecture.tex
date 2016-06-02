@@ -2,8 +2,8 @@
 \section{ClickNP编程工具}
 ClickNP是微软亚洲研究院开发的FPGA编程工具\cite{clicknp}。
 \subsection{系统架构}
-ClickNP基于Catapult Shell体系结构\cite{6853195}搭建。该体系结构包含PCIe、直接内存访问(direct memory access, DMA)、
-内存管理单元(memory management unit, MMU)、以太网介质访问控制(media access control, MAC)等
+ClickNP基于Catapult Shell体系结构\cite{6853195}搭建。该体系结构包含PCIe、直接内存访问 (direct memory access, DMA)、
+内存管理单元 (memory management unit, MMU)、以太网介质访问控制 (media access control, MAC)等
 适用于多种应用场景的可服用逻辑，并将其抽象为定义好的接口。由ClickNP编写的FPGA程序生成的目标为Catapult功能。
 由于ClickNP依赖的不同高级编程工具生成的目标接口不一致，因此在其下层有一个适配层，
 将不同高级编程工具接口统一到Catapul Shell接口。
@@ -30,7 +30,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{channel}
-\caption{连接两个元件的通道} \label{fig:channel}
+\caption{连接两个元件的通道}\label{fig:channel}
 \end{figure}
 
 一个元件的输出端口可以用通道与另一个元件的输入端口连接。在ClickNP中，通道相当于一个先进先出的缓冲区，
@@ -39,7 +39,7 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{flit}
-\caption{帧结构} \label{fig:flit}
+\caption{帧结构}\label{fig:flit}
 \end{figure}
 
 \lstinputlisting[float, floatplacement=htbp, caption=帧成员定义, label=code:flitdef]{code/flit.cl}
@@ -48,9 +48,9 @@ ClickNP提供了模块化的编程模型，以元件为基本处理模块。每�
 数据载荷长32字节。其结构及成员定义如图~\ref{fig:flit}、代码~\ref{code:flitdef} 所示。
 
 以完整包为代表的大段数据会被拆分为多个帧在元件之间传播。
-其中第一帧的包开始位(start of packet, \lstinline$sop$)置为真，
-最后一帧的包结束位(end of packet, \lstinline$eop$)置为真。
-如果数据载荷小于32字节，那么最后一帧的留白(padding, \lstinline$pad$)域指代载荷的尾部留白区段大小。
+其中第一帧的包开始位 (start of packet, \lstinline$sop$)置为真，
+最后一帧的包结束位 (end of packet, \lstinline$eop$)置为真。
+如果数据载荷小于32字节，那么最后一帧的留白 (padding, \lstinline$pad$)域指代载荷的尾部留白区段大小。
 将大的包拆分为帧，不仅能够降低延迟，还有助于提升处理包数据的各级流水线之间并行化程度。
 
 在定义完各个元件之后，通过ClickNP配置文件将元件连接为有向图，使其互连，形成总的计算系统。
@@ -80,25 +80,25 @@ ClickNP元件类似于面向对象语言中的对象，可以用C++这样的语�
 ClickNP内建了一系列与端口进行数据交互的函数接口，如表~\ref{tab:operations} 所示。
 \begin{table}[htbp]
 \centering
-\caption{ClickNP内建接口} \label{tab:operations}
+\caption{ClickNP内建接口}\label{tab:operations}
 \begin{tabular}{l|l}
-\hline
+\toprule
 \lstinline$uchar get_input_port()$         & 获取第一个有帧输入的端口号 \\
-\hline
+\midrule
 \lstinline$bool test_input_port(uchar id)$ & 检查\lstinline$id$号端口有无帧输入 \\
-\hline
+\midrule
 \lstinline$flit read_input_port(uchar id)$ & 自\lstinline$id$号端口读取帧 \\
-\hline
+\midrule
 \lstinline$flit peek_input_port(uchar id)$ & 窥视\lstinline$id$号输入端口的帧 \\
-\hline
+\midrule
 \lstinline$void set_output_port(uchar id,$ & 向\lstinline$id$号端口写入帧， \\
 \lstinline$flit x)$                        & 在处理函数执行到返回时， \\
                                            & 该帧将被写入通道 \\
-\hline
+\midrule
 \lstinline$ClSignal read_signal()$         & 自信号输入端口读取帧 \\
-\hline
+\midrule
 \lstinline$void set_signal(ClSignal p)$    & 向信号输出端口写入帧 \\
-\hline
+\bottomrule
 \end{tabular}
 \end{table}
 
@@ -137,32 +137,32 @@ RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可�
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocereq}
-\caption{建立RoCE连接} \label{fig:rocereq}
+\caption{建立RoCE连接}\label{fig:rocereq}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocerej}
-\caption{建立RoCE连接被拒绝} \label{fig:rocerej}
+\caption{建立RoCE连接被拒绝}\label{fig:rocerej}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocedreq}
-\caption{断开RoCE连接} \label{fig:rocedreq}
+\caption{断开RoCE连接}\label{fig:rocedreq}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocewriteonly}
-\caption{单RoCE包写操作} \label{fig:rocewriteonly}
+\caption{单RoCE包写操作}\label{fig:rocewriteonly}
 \note{在数据载荷不多于1024字节时的写请求只包含单包，数据发送请求的工作过程与之类似。}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocewritemany}
-\caption{多RoCE包写操作} \label{fig:rocewritemany}
+\caption{多RoCE包写操作}\label{fig:rocewritemany}
 \note{对于超过1024字节的数据载荷，先后发送Write First、Write Middle (如有)、Write Last三种包。
 自Write First起，接收端每收到256个包反馈一个确认包，也对最后一个包进行反馈，
 数据发送请求的工作过程与之类似。}
@@ -171,14 +171,14 @@ RoCEv2则基于用户数据报协议 (user datagram protocol, UDP)，因而可�
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocereadonly}
-\caption{单RoCE包读操作} \label{fig:rocereadonly}
+\caption{单RoCE包读操作}\label{fig:rocereadonly}
 \note{在数据载荷不多于1024字节时读响应至包含单包}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocereadmany}
-\caption{多RoCE包读操作} \label{fig:rocereadmany}
+\caption{多RoCE包读操作}\label{fig:rocereadmany}
 \note{对于超过1024字节的数据载荷，先后发送Read Response First、Read Response Middle (如有)、
 Read Response Last三种包。自Read Response First起，接收端没收到256个包反馈一个确认包，
 也对最后一个包进行反馈。}
@@ -194,5 +194,5 @@ Read Response Last三种包。自Read Response First起，接收端没收到256�
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocewritenak}
-\caption{RoCE重传策略} \label{fig:rocewritenak}
+\caption{RoCE重传策略}\label{fig:rocewritenak}
 \end{figure}
