@@ -15,10 +15,10 @@ FPGA通过以太网端口与机架顶 (top-of-rack, ToR)的戴尔S6000交换机\
 \centering
 \includegraphics[width=4in]{rocerate}
 \caption{RDMA Send与PCIe接口通信带宽对比}\label{fig:rocerate}
-\note{实验中Send、Read、Write间性能差异在误差范围内，故只列出Send的数据}
+\note{横轴为对数坐标数据载荷大小 (字节), 纵轴为算术坐标通信带宽 (Gbps)\\实验中Send、Read、Write间性能差异在误差范围内，故只列出Send的数据}
 \end{figure}
 
-据图~\ref{fig:rocerate} 可见，随着包的增大，单位时间内需要处理的包数目减少，
+据图~\ref{fig:rocerate} 可见，随着数据载荷的增大，单位时间内需要处理的请求数目减少，
 系统从计算密集向I/O密集转变，PCIe与RDMA均达到其带宽上限。
 RDMA的通信带宽为40Gbps（实际中为36Gbps），高于PCIe接口的32Gbps（实际中25.6Gbps）。
 
@@ -26,12 +26,14 @@ RDMA的通信带宽为40Gbps（实际中为36Gbps），高于PCIe接口的32Gbps
 \centering
 \includegraphics[width=4in]{rocelat}
 \caption{RDMA Send与PCIe接口通信延迟对比}\label{fig:rocelat}
+\note{横轴为对数坐标数据载荷大小 (字节), 纵轴为算术坐标通信延迟 (微秒)}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=4in]{rocelatlog}
 \caption{RDMA Send与PCIe接口通信延迟对比（对数纵坐标）}\label{fig:rocelatlog}
+\note{横轴为对数坐标数据载荷大小 (字节), 纵轴为对数坐标通信延迟 (微秒)}
 \end{figure}
 
 据图~\ref{fig:rocelat}、图~\ref{fig:rocelatlog}可见，随着包的增大，帧数增多，
