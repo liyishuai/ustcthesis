@@ -55,7 +55,7 @@ FPGA通过以太网端口与机架顶 (top-of-rack, ToR)的戴尔S6000交换机\
 系统从计算密集向I/O密集转变，PCIe与RDMA均达到其带宽上限。
 RDMA的通信带宽为40Gbps（实际中为36Gbps），高于PCIe接口的32Gbps（实际中25.6Gbps）。
 
-据图~\ref{fig:rocelat}、图~\ref{fig:rocelatlog}可见，随着包的增大，帧数增多，
+据图~\ref{fig:rocelat}、图~\ref{fig:rocelatlog}可见，随着数据载荷的增大，帧数增多，
 处理所需的周期数线性增加，在通信延迟上也得到了体现。
 
 实验结果表明，RoCE能够有效利用网卡的通信带宽，实现比PCIe接口更高的传输速率以及更低的延迟。
